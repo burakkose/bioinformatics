@@ -1,0 +1,4 @@
+NeedlemanWunschAlgorithm
+========================
+
+Finding every possibility
