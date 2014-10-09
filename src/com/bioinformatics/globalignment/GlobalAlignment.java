@@ -1,14 +1,22 @@
 package com.bioinformatics.globalignment;
 
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.util.LinkedList;
 import java.util.Queue;
+import java.util.Scanner;
 import java.util.Stack;
 
+/**
+ * 
+ * @author BURAK KÖSE
+ *
+ */
 class Point {
 	private final int	x, y;
 	private final String	storeString1, storeString2;
 
-	public Point(int x, int y, String s1, String s2) {
+	public Point(final int x, final int y, final String s1, final String s2) {
 		this.x = x;
 		this.y = y;
 		storeString1 = s1;
@@ -33,14 +41,14 @@ class Point {
 }
 
 class Node {
-	private int				value;
-	private Queue<String>	direction	= new LinkedList<String>();
+	private int					value;
+	private final Queue<String>	direction	= new LinkedList<String>();
 
 	public int getValue() {
 		return value;
 	}
 
-	public void setValue(int value) {
+	public void setValue(final int value) {
 		this.value = value;
 	}
 
@@ -56,23 +64,23 @@ class Node {
 		return direction.size();
 	}
 
-	public boolean pushDirection(String c) {
+	public boolean pushDirection(final String c) {
 		return direction.add(c);
 	}
 }
 
 public class GlobalAlignment {
-	private final String	inputString1;
-	private final String	inputString2;
+	private String			inputString1;
+	private String			inputString2;
 
 	private final Node[][]	solveMatrix;
 
-	public GlobalAlignment(String str1, String str2) {
+	public GlobalAlignment(final String str1, final String str2) {
 		inputString1 = str1;
 		inputString2 = str2;
 
-		int lenString1 = inputString1.length() + 1;
-		int lenString2 = inputString2.length() + 1;
+		final int lenString1 = inputString1.length() + 1;
+		final int lenString2 = inputString2.length() + 1;
 
 		solveMatrix = new Node[lenString2][lenString1];
 
@@ -81,12 +89,21 @@ public class GlobalAlignment {
 				solveMatrix[i][j] = new Node();
 			}
 		}
+		readFile(null); // read input file for input strings
 		needlemanWunsch(lenString1, lenString2); // Needleman - Wunsch algorithm
-		backtracking(lenString2 - 1, lenString1 - 1); // find all possibility
+		traceback(lenString2 - 1, lenString1 - 1); // find all possibility
 	}
 
-	private void needlemanWunsch(int lenString1, int lenString2) {
-		int gap = -1;
+	/**
+	 * This is Needleman-Wunsch Algorithm
+	 * 
+	 * @param lenString1
+	 *            first string length
+	 * @param lenString2
+	 *            second string length
+	 */
+	private void needlemanWunsch(final int lenString1, final int lenString2) {
+		final int gap = -1;
 		int match = 1;
 		for (int i = 0; i < lenString2; i++) {
 			solveMatrix[i][0].setValue(gap * i);
@@ -101,11 +118,12 @@ public class GlobalAlignment {
 				} else {
 					match = -1;
 				}
-				int northWest = solveMatrix[i - 1][j - 1].getValue() + match;
-				int north = solveMatrix[i - 1][j].getValue() + gap;
-				int west = solveMatrix[i][j - 1].getValue() + gap;
+				final int northWest = solveMatrix[i - 1][j - 1].getValue()
+						+ match;
+				final int north = solveMatrix[i - 1][j].getValue() + gap;
+				final int west = solveMatrix[i][j - 1].getValue() + gap;
 
-				int max = Math.max(Math.max(northWest, west), north);
+				final int max = Math.max(Math.max(northWest, west), north);
 
 				solveMatrix[i][j].setValue(max);
 
@@ -122,22 +140,30 @@ public class GlobalAlignment {
 		}
 	}
 
-	private void backtracking(int i, int j) {
-		Stack<Point> stack = new Stack<Point>();
-		stack.push(new Point(i, j, "", ""));
+	/**
+	 * This is finding all possibility algorithm like Backtracking algorithm.
+	 * 
+	 * @param i
+	 *            matrix last X position
+	 * @param j
+	 *            matrix last Y position
+	 */
+	private void traceback(int i, int j) {
+		final Stack<Point> stack = new Stack<Point>();
+		stack.push(new Point(i, j, "", "")); // first push
 
 		do {
-			StringBuilder lastString1 = new StringBuilder(), lastString2 = new StringBuilder();
+			final StringBuilder lastString1 = new StringBuilder(), lastString2 = new StringBuilder();
 
-			Point p = (stack.pop());
+			final Point p = stack.pop();
 			i = p.getX();
 			j = p.getY();
 
-			lastString1.append(p.getStoreString1());
-			lastString2.append(p.getStoreString2());
+			lastString1.append(p.getStoreString1()); // get back last string
+			lastString2.append(p.getStoreString2()); // ""
 
 			do {
-				Node n = solveMatrix[i][j];
+				final Node n = solveMatrix[i][j];
 				char forSwitchChar;
 
 				if (n.sizeDirection() > 1) {
@@ -168,6 +194,26 @@ public class GlobalAlignment {
 			} while (i > 0 || j > 0);
 			System.out.println(lastString1.reverse().toString() + " + "
 					+ lastString2.reverse().toString());
+			// writeFile();
 		} while (stack.size() > 0);
+	}
+
+	private void readFile(final String location) {
+
+		Scanner input = null;
+
+		try {
+			input = new Scanner(new File(location));
+			inputString1 = input.nextLine();
+			inputString2 = input.nextLine();
+		} catch (final FileNotFoundException e) {
+			e.printStackTrace();
+		} finally {
+			input.close();
+		}
+	}
+
+	private void writeFile() {
+
 	}
 }
