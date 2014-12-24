@@ -40,7 +40,8 @@ deleteState = ['D{}'.format(k) for k in range(1, len(matchStatePossition))]
 transition_probability.update({key : {'strings' : []} for key in matchState})
 transition_probability.update({key : {'strings' : []} for key in insertState})
 transition_probability.update({key : {'strings' : []} for key in deleteState})
-transition_probability['M0']['strings'] = [n for n in range(num_of_strings)] # all input string in begin state
+# all input string put in begin state
+transition_probability['M0']['strings'] = [n for n in range(num_of_strings)] 
 
 i = 0 # counter
 j = 0 # current state no
@@ -63,12 +64,12 @@ while i < num_of_chars + 1:
                 if d_deleteList: # if d_deleteLİst not empty
                     transition_probability[D][nextD] = {'prob' : float(len(d_deleteList) / 
                                                                        len(transition_probability[D]['strings'])),
-                                                        'strings' : d_deleteList} # D --> D
+                                                        'strings' : d_deleteList}         # D --> D
                     transition_probability[nextD]['strings'].extend(d_deleteList)
                 if d_matchList: # if d_matchList not empty
-                    transition_probability[D][nextM] = {'prob' : float(len(d_matchList) / 
+                    transition_probability[D][nextM] = {'prob' : float(len(d_matchList) / # D --> M
                                                                        len(transition_probability[D]['strings'])),
-                                                        'strings' : transition_probability[D]['strings']} # D --> M
+                                                        'strings' : transition_probability[D]['strings']} 
                     transition_probability[nextM]['strings'].extend(d_matchList)
             if transition_probability[I]['strings']:  # I --> M and I --> D
                 # I(j) --> D(j+1) or I(j) --> M(j+1)
@@ -87,7 +88,7 @@ while i < num_of_chars + 1:
                 if i_matchList:  # if i_matchList not empty
                     transition_probability[I][nextM] = {'prob' : float(len(i_matchList) / 
                                                                        len(transition_probability[I]['strings'])),
-                                                        'strings' : i_matchList} # I --> M
+                                                        'strings' : i_matchList}  # I --> M
                     transition_probability[nextM]['strings'].extend(set(i_matchList))
         if transition_probability[M]['strings']:  # M --> D and M --> M
             # M(j) --> D(j+1) or M(j) --> M(j+1)
@@ -119,11 +120,11 @@ while i < num_of_chars + 1:
             i += 1  # next insert state
         if insert_state_list: # if insert_state not empty
             come_from_match  = [n for n in transition_probability[M]['strings'] 
-                                if n in insert_state_list]           # M --> I
+                                if n in insert_state_list]                      # M --> I
             come_from_del    = [n for n in transition_probability[D]['strings'] 
-                                if n in insert_state_list]           # D --> I
-            come_from_insert = [n for n in insert_state_list 
-                                if insert_state_list.count(n) > 1]   # I --> I
+                                if n in insert_state_list]                      # D --> I
+            come_from_insert = [n for n in set(insert_state_list) 
+                                for k in range(insert_state_list.count(n)-1)]   # I --> I
             if come_from_match:  # if string come from match state
                 transition_probability[M][I] = {'prob' :  float(len(come_from_match) / 
                                                                 len(transition_probability[M]['strings'])),
@@ -133,7 +134,7 @@ while i < num_of_chars + 1:
                                                                 len(transition_probability[D]['strings'])),
                                                         'strings' : come_from_del}   # D(j) --> I(j)
             if come_from_insert: # if string come from insert state
-                transition_probability[I][I] = {'prob' :  float((len(insert_state_list) - len(come_from_insert)) / 
+                transition_probability[I][I] = {'prob' :  float(len(come_from_insert) / 
                                                                 len(insert_state_list)),
                                                         'strings' : list(set(come_from_insert))}
             transition_probability[I]['strings'].extend(insert_state_list)
