@@ -1,9 +1,9 @@
 from math import ceil
 
-def _getMID(i):
+def _getMID(i): # get state from parameter
     return 'M{}'.format(i), 'I{}'.format(i), 'D{}'.format(i)
 
-def _keyify(x):
+def _keyify(x): # for sort
     return int("{}".format(x[0][1:]))
 
 # variables
@@ -16,8 +16,8 @@ emission_probability = {}   # emission probability
 with open("in.inp", 'r') as f:
     inputString = tuple(f.read().split('\n'))
 
-num_of_strings = len(inputString) # 
-num_of_chars = len(inputString[0])
+num_of_strings = len(inputString)  # number of input strings
+num_of_chars = len(inputString[0]) # number of char in one string
 
 frequencyList = [{} for i in range(num_of_chars + 1)]
 
@@ -139,7 +139,8 @@ while i < num_of_chars + 1:
                                                         'strings' : list(set(come_from_insert))}
             transition_probability[I]['strings'].extend(insert_state_list)
     # get emission probability without '.'
-    emission_probability[nextM] = {n : frequencyList[i][n]  for n in frequencyList[i] if n != '.'} 
+    emission_probability[nextM] = {n : round(frequencyList[i][n] / num_of_strings,3) 
+                                   for n in frequencyList[i] if n != '.'} 
     i += 1
     
 # write emission and transition probability
