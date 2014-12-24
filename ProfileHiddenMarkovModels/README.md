@@ -86,4 +86,4 @@ Emission probability.
 **Free Software, Hell Yeah!**
 
 [Go Wikipedia HMM]:https://en.wikipedia.org/wiki/Hidden_Markov_model
-[Go Wikipedia pHMM]:https://en.wikipedia.org/wiki/Hidden_Markov_model
+[Go Wikipedia pHMM]:http://www.biology.wustl.edu/gcg/hmmanalysis.html
