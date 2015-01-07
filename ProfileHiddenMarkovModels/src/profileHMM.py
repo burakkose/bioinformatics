@@ -54,7 +54,7 @@ while i < num_of_chars + 1:
         m_deleteList , m_matchList  = [],[] # M --> D List and M --> M List
         i_matchList  , i_deleteList = [],[] # I --> M List and I --> D List
         if i != 0:
-            if transition_probability[D]['strings']:  # D --> D and D --> M
+            if transition_probability.get(D,{}).get('strings',[]):  # D --> D and D --> M
                 # D(j) --> D(j+1) or D(j) --> M(j+1)
                 try:
                     d_deleteList = [n for n in transition_probability[D]['strings'] if inputString[n][i] == '.']
@@ -94,7 +94,7 @@ while i < num_of_chars + 1:
             # M(j) --> D(j+1) or M(j) --> M(j+1)
             try:
                 m_deleteList = [n for n in transition_probability[M]['strings'] 
-                                if inputString[n][i] == '.']
+                                if inputString[n][i] == '.' and n not in transition_probability[I]['strings']]
             except Exception:
                 pass
             m_matchList  = [n for n in transition_probability[M]['strings'] 
@@ -121,7 +121,7 @@ while i < num_of_chars + 1:
         if insert_state_list: # if insert_state not empty
             come_from_match  = [n for n in transition_probability[M]['strings'] 
                                 if n in insert_state_list]                      # M --> I
-            come_from_del    = [n for n in transition_probability[D]['strings'] 
+            come_from_del    = [n for n in transition_probability.get(D,{}).get('strings',[])
                                 if n in insert_state_list]                      # D --> I
             come_from_insert = [n for n in set(insert_state_list) 
                                 for k in range(insert_state_list.count(n)-1)]   # I --> I
@@ -152,3 +152,4 @@ print(*e, sep="\n", file=open("e.out", "w"))
 print(*t, sep="\n", file=open("t.out", "w")) 
             
             
+
