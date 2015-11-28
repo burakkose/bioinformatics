@@ -4,3 +4,6 @@
 [submodule "profile-hidden-markov-models"]
 	path = profile-hidden-markov-models
 	url = https://github.com/burakkose/profile-hidden-markov-models.git
+[submodule "center-star-msa"]
+	path = center-star-msa
+	url = https://github.com/burakkose/center-star-msa.git
