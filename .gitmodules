@@ -1,0 +1,6 @@
+[submodule "needleman-wunsch"]
+	path = needleman-wunsch
+	url = https://github.com/burakkose/needleman-wunsch.git
+[submodule "profile-hidden-markov-models"]
+	path = profile-hidden-markov-models
+	url = https://github.com/burakkose/profile-hidden-markov-models.git
