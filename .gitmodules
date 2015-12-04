@@ -7,3 +7,6 @@
 [submodule "center-star-msa"]
 	path = center-star-msa
 	url = https://github.com/burakkose/center-star-msa.git
+[submodule "viterbi-algorithm"]
+	path = viterbi-algorithm
+	url = https://github.com/burakkose/viterbi-algorithm.git
