@@ -10,3 +10,6 @@
 [submodule "viterbi-algorithm"]
 	path = viterbi-algorithm
 	url = https://github.com/burakkose/viterbi-algorithm.git
+[submodule "phylogenetic-tree-upgma"]
+	path = phylogenetic-tree-upgma
+	url = https://github.com/burakkose/phylogenetic-tree-upgma.git
